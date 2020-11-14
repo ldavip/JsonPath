@@ -216,7 +216,11 @@ public class PathCompiler {
                     String functionName = path.subSequence(startPosition, endPosition).toString();
                     functionParameters = parseFunctionParameters(functionName);
                 } else {
-                    path.setPosition(readPosition + 1);
+                    if (path.hasMoreCharacters()) {
+                        path.setPosition(readPosition + 2);
+                    } else {
+                        path.setPosition(readPosition + 1);
+                    }
                 }
             }
             else {
