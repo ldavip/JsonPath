@@ -5,7 +5,7 @@ package com.jayway.jsonpath.internal.function.numeric;
  *
  * Created by mattg on 6/26/15.
  */
-public class Average extends AbstractAggregation {
+public class Average extends AbstractNumberAggregation {
 
     private Double summation = 0d;
     private Double count = 0d;

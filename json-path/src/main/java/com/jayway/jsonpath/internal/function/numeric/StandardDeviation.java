@@ -5,7 +5,7 @@ package com.jayway.jsonpath.internal.function.numeric;
  *
  * Created by mattg on 6/27/15.
  */
-public class StandardDeviation extends AbstractAggregation {
+public class StandardDeviation extends AbstractNumberAggregation {
     private Double sumSq = 0d;
     private Double sum = 0d;
     private Double count = 0d;
