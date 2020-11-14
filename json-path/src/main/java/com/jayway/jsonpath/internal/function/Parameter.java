@@ -115,13 +115,26 @@ public class Parameter {
      */
     public static void consume(Class expectedType, EvaluationContext ctx, Collection collection, Object value) {
         if (ctx.configuration().jsonProvider().isArray(value)) {
-            for (Object o : ctx.configuration().jsonProvider().toIterable(value)) {
-                if (o != null && expectedType.isAssignableFrom(o.getClass())) {
-                    collection.add(o);
-                } else if (o != null && expectedType == String.class) {
-                    collection.add(o.toString());
-                }
-            }
+        	try {
+        		for (Object o : ctx.configuration().jsonProvider().toIterable(value)) {
+        			if (o != null && expectedType.isAssignableFrom(o.getClass())) {
+        				collection.add(o);
+        			} else if (o != null && expectedType == String.class) {
+        				collection.add(o.toString());
+        			}
+        		}        		
+        	} catch (ClassCastException e) {
+        		String arrayAsString = value.toString();
+        		Object arrayParsed = ctx.configuration().jsonProvider().parse(arrayAsString);
+
+        		for (Object o : ctx.configuration().jsonProvider().toIterable(arrayParsed)) {
+        			if (o != null && expectedType.isAssignableFrom(o.getClass())) {
+        				collection.add(o);
+        			} else if (o != null && expectedType == String.class) {
+        				collection.add(o.toString());
+        			}
+        		}        		
+        	}
         } else {
             if (value != null && expectedType.isAssignableFrom(value.getClass())) {
                 collection.add(value);
