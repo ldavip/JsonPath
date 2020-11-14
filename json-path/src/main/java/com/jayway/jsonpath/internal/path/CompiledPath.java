@@ -24,7 +24,7 @@ import com.jayway.jsonpath.internal.function.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 public class CompiledPath implements Path {
 
@@ -75,7 +75,7 @@ public class CompiledPath implements Path {
                 Parameter parameter = new Parameter();
                 parameter.setPath(new CompiledPath(path, true));
                 parameter.setType(ParamType.PATH);
-                ((FunctionPathToken)token).setParameters(Arrays.asList(parameter));
+                ((FunctionPathToken)token).appendParameters(Collections.singletonList(parameter));
                 RootPathToken functionRoot = new RootPathToken('$');
                 functionRoot.setTail(token);
                 functionRoot.setNext(token);

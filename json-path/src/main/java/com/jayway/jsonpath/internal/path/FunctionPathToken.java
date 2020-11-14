@@ -7,6 +7,8 @@ import com.jayway.jsonpath.internal.function.PathFunctionFactory;
 import com.jayway.jsonpath.internal.function.latebinding.JsonLateBindingValue;
 import com.jayway.jsonpath.internal.function.latebinding.PathLateBindingValue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -83,5 +85,13 @@ public class FunctionPathToken extends PathToken {
 
     public void setParameters(List<Parameter> parameters) {
         this.functionParams = parameters;
+    }
+
+    public void appendParameters(List<Parameter> parameters) {
+        if (this.functionParams == null) {
+            this.functionParams = new ArrayList<>(parameters);
+        } else {
+            this.functionParams.addAll(parameters);
+        }
     }
 }
