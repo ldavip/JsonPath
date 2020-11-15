@@ -14,28 +14,26 @@
  */
 package com.jayway.jsonpath.spi.cache;
 
-import com.jayway.jsonpath.JsonPath;
-
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class LRUCache implements Cache {
+public class LRUCache<K, V> implements Cache<K, V> {
 
     private final ReentrantLock lock = new ReentrantLock();
 
-    private final Map<String, JsonPath> map = new ConcurrentHashMap<String, JsonPath>();
-    private final Deque<String> queue = new LinkedList<String>();
+    private final Map<K, V> map = new ConcurrentHashMap<>();
+    private final Deque<K> queue = new LinkedList<>();
     private final int limit;
 
     public LRUCache(int limit) {
         this.limit = limit;
     }
 
-    public void put(String key, JsonPath value) {
-        JsonPath oldValue = map.put(key, value);
+    public void put(K key, V value) {
+        V oldValue = map.put(key, value);
         if (oldValue != null) {
             removeThenAddKey(key);
         } else {
@@ -46,15 +44,15 @@ public class LRUCache implements Cache {
         }
     }
 
-    public JsonPath get(String key) {
-        JsonPath jsonPath = map.get(key);
+    public V get(K key) {
+        V jsonPath = map.get(key);
         if(jsonPath != null){
             removeThenAddKey(key);
         }
         return jsonPath;
     }
 
-    private void addKey(String key) {
+    private void addKey(K key) {
         lock.lock();
         try {
             queue.addFirst(key);
@@ -63,17 +61,16 @@ public class LRUCache implements Cache {
         }
     }
 
-    private String removeLast() {
+    private K removeLast() {
         lock.lock();
         try {
-            final String removedKey = queue.removeLast();
-            return removedKey;
+            return queue.removeLast();
         } finally {
             lock.unlock();
         }
     }
 
-    private void removeThenAddKey(String key) {
+    private void removeThenAddKey(K key) {
         lock.lock();
         try {
             queue.removeFirstOccurrence(key);
@@ -84,7 +81,7 @@ public class LRUCache implements Cache {
 
     }
 
-    private void removeFirstOccurrence(String key) {
+    private void removeFirstOccurrence(K key) {
         lock.lock();
         try {
             queue.removeFirstOccurrence(key);
@@ -93,11 +90,11 @@ public class LRUCache implements Cache {
         }
     }
 
-    public JsonPath getSilent(String key) {
+    public V getSilent(K key) {
         return map.get(key);
     }
 
-    public void remove(String key) {
+    public void remove(K key) {
         removeFirstOccurrence(key);
         map.remove(key);
     }

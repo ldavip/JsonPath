@@ -3,14 +3,14 @@ package com.jayway.jsonpath.spi.cache;
 import com.jayway.jsonpath.InvalidJsonException;
 import com.jayway.jsonpath.JsonPath;
 
-public interface Cache {
+public interface Cache<K, V> {
 
 	/**
-     * Get the Cached JsonPath
-     * @param key cache key to lookup the JsonPath
-     * @return JsonPath
+     * Get the Cached value
+     * @param key cache key to lookup the value
+     * @return value cached
      */
-	 JsonPath get(String key);
+	 V get(K key);
 	
 	/**
      * Add JsonPath to the cache
@@ -18,5 +18,5 @@ public interface Cache {
      * @param value JsonPath to be cached
      * @throws InvalidJsonException
      */
-	 void put(String key, JsonPath value);
+	 void put(K key, V value);
 }

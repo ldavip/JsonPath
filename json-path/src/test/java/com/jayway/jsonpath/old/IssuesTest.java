@@ -685,7 +685,7 @@ public class IssuesTest extends BaseTest {
 
     @Test
     public void issue_94_1() throws Exception {
-        LRUCache cache = new LRUCache(200);
+        LRUCache<String, JsonPath> cache = new LRUCache<>(200);
         JsonPath dummy = JsonPath.compile("$");
         for (int i = 0; i < 1000; ++i) {
             String key = String.valueOf(i);
@@ -697,7 +697,7 @@ public class IssuesTest extends BaseTest {
 
     @Test
     public void issue_94_2() throws Exception {
-        LRUCache cache = new LRUCache(5);
+        LRUCache<String, JsonPath> cache = new LRUCache<>(5);
 
         JsonPath dummy = JsonPath.compile("$");
 
