@@ -75,6 +75,11 @@ public class NestedFunctionTest extends BaseFunctionTest {
     }
 
     @Test
+    public void testNestedStringConcatWithJSONParameter() {
+        verifyTextFunction(conf, "$.text.concat(\"(\", $.concat(\"ghijk\", \"-\", \"lmnop\", \"[\", $.concat(\"qrs\", \"-\", \"tuv\"), \"]\"), \")\", \"wxyz\")", "abcdef(ghijk-lmnop[qrs-tuv])wxyz");
+    }
+
+    @Test
     public void testAppendNumber() {
         verifyMathFunction(conf, "$.numbers.append(11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0).avg()", 10.0);
     }

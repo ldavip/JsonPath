@@ -45,6 +45,8 @@ public class FilterCompilerTest {
         assertThat(compile("[?($[\"firstname\"].lastname)]").toString()).isEqualTo("[?($[\"firstname\"]['lastname'])]");
         assertThat(compile("[?($[\"firstname\", \"lastname\"])]").toString()).isEqualTo("[?($[\"firstname\",\"lastname\"])]");
         assertThat(compile("[?(((@.a && @.b || @.c)) || @.x)]").toString()).isEqualTo("[?(((@['a'] && @['b']) || @['c']) || @['x'])]");
+        assertThat(compile("[?(@.x == @.y.min())]").toString()).isEqualTo("[?(@['x'] == @['y'].min())]");
+        assertThat(compile("[?(@.x == $.y[?(@.z == 'A')].min())]").toString()).isEqualTo("[?(@['x'] == $['y'][?].min())]");
 
     }
 

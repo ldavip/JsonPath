@@ -298,76 +298,84 @@ public class PathCompiler {
                 }
             }
 
-            switch (c) {
-                case DOUBLE_QUOTE:
-                    if (priorChar != '\\' && groupQuote > 0) {
-                        if (groupQuote == 0) {
-                            throw new InvalidPathException("Unexpected quote '\"' at character position: " + path.position());
+            if (c == DOUBLE_QUOTE) {
+                if (priorChar != '\\' && groupQuote > 0) {
+                    if (groupQuote == 0) {
+                        throw new InvalidPathException("Unexpected quote '\"' at character position: " + path.position());
+                    }
+                    groupQuote--;
+                }
+                else {
+                    groupQuote++;
+                }
+            } else if (groupQuote == 0) {
+                switch (c) {
+                    case OPEN_PARENTHESIS:
+                        groupParen++;
+                        break;
+                    case OPEN_BRACE:
+                        groupBrace++;
+                        break;
+                    case OPEN_SQUARE_BRACKET:
+                        groupBracket++;
+                        break;
+
+                    case CLOSE_BRACE:
+                        if (0 == groupBrace) {
+                            throw new InvalidPathException("Unexpected close brace '}' at character position: " + path.position());
                         }
-                        groupQuote--;
-                    }
-                    else {
-                        groupQuote++;
-                    }
-                    break;
-                case OPEN_PARENTHESIS:
-                    groupParen++;
-                    break;
-                case OPEN_BRACE:
-                    groupBrace++;
-                    break;
-                case OPEN_SQUARE_BRACKET:
-                    groupBracket++;
-                    break;
-
-                case CLOSE_BRACE:
-                    if (0 == groupBrace) {
-                        throw new InvalidPathException("Unexpected close brace '}' at character position: " + path.position());
-                    }
-                    groupBrace--;
-                    break;
-                case CLOSE_SQUARE_BRACKET:
-                    if (0 == groupBracket) {
-                        throw new InvalidPathException("Unexpected close bracket ']' at character position: " + path.position());
-                    }
-                    groupBracket--;
-                    break;
-
-                // In either the close paren case where we have zero paren groups left, capture the parameter, or where
-                // we've encountered a COMMA do the same
-                case CLOSE_PARENTHESIS:
-                    groupParen--;
-                    if (0 != groupParen) {
-                        parameter.append(c);
-                    }
-                case COMMA:
-                    // In this state we've reach the end of a function parameter and we can pass along the parameter string
-                    // to the parser
-                    if ((0 == groupQuote && 0 == groupBrace && 0 == groupBracket
-                            && ((0 == groupParen && CLOSE_PARENTHESIS == c) || 1 == groupParen))) {
-                        endOfStream = (0 == groupParen);
-
-                        if (null != type) {
-                            Parameter param = null;
-                            switch (type) {
-                                case JSON:
-                                    // parse the json and set the value
-                                    param = new Parameter(parameter.toString());
-                                    break;
-                                case PATH:
-                                    LinkedList<Predicate> predicates = new LinkedList<Predicate>();
-                                    PathCompiler compiler = new PathCompiler(parameter.toString(), predicates);
-                                    param = new Parameter(compiler.compile());
-                                    break;
-                            }
-                            if (null != param) {
-                                parameters.add(param);
-                            }
-                            parameter.delete(0, parameter.length());
-                            type = null;
+                        groupBrace--;
+                        break;
+                    case CLOSE_SQUARE_BRACKET:
+                        if (0 == groupBracket) {
+                            throw new InvalidPathException("Unexpected close bracket ']' at character position: " + path.position());
                         }
-                    }
-                    break;
+                        groupBracket--;
+                        break;
+
+                    // In either the close paren case where we have zero paren groups left, capture the parameter, or where
+                    // we've encountered a COMMA do the same
+                    case CLOSE_PARENTHESIS:
+                        groupParen--;
+                        // Removed injection of additional parenthesis that was breaking expression
+                        // when there are nested functions
+//                        if (0 != groupParen) {
+//                            parameter.append(c);
+//                        }
+                    case COMMA:
+                        // In this state we've reach the end of a function parameter and we can pass along the parameter string
+                        // to the parser
+                        if ((0 == groupQuote && 0 == groupBrace && 0 == groupBracket
+                                && ((0 == groupParen && CLOSE_PARENTHESIS == c) || 1 == groupParen))) {
+                            endOfStream = (0 == groupParen);
+
+                            if (null != type) {
+                                Parameter param = null;
+                                switch (type) {
+                                    case JSON:
+                                        // parse the json and set the value
+                                        param = new Parameter(parameter.toString());
+                                        break;
+                                    case PATH:
+                                        // In case last char of parameter is ')' closing inner function
+                                        // append it to the path
+                                        if (c == CLOSE_PARENTHESIS && groupParen == 1) {
+                                            parameter.append(c);
+                                        }
+                                        LinkedList<Predicate> predicates = new LinkedList<Predicate>();
+                                        PathCompiler compiler = new PathCompiler(parameter.toString(), predicates);
+                                        param = new Parameter(compiler.compile());
+                                        break;
+                                }
+                                if (null != param) {
+                                    parameters.add(param);
+                                }
+                                parameter.delete(0, parameter.length());
+                                type = null;
+                            }
+                        }
+                        break;
+                }
             }
 
             if (type != null && !(c == COMMA && 0 == groupBrace && 0 == groupBracket && 1 == groupParen)) {
