@@ -20,6 +20,8 @@ public class Length implements PathFunction {
             return ctx.configuration().jsonProvider().length(model);
         } else if(ctx.configuration().jsonProvider().isMap(model)){
             return ctx.configuration().jsonProvider().length(model);
+        } else if (model instanceof String) {
+            return model.toString().length();
         }
         return null;
     }

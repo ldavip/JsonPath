@@ -66,6 +66,11 @@ public class JSONEntityPathFunctionTest extends BaseFunctionTest {
         verifyFunction(conf, "$.numbers.length()", NUMBER_SERIES, 10);
         verifyFunction(conf, "$.numbers.size()", NUMBER_SERIES, 10);
     }
+    @Test
+    public void testLengthOfString() {
+        // The length of String is an integer
+        verifyFunction(conf, "$['urls'][0].length()", TEXT_SERIES, 51);
+    }
 
 
     @Test
