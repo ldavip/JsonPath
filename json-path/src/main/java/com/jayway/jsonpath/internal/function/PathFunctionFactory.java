@@ -1,6 +1,7 @@
 package com.jayway.jsonpath.internal.function;
 
 import com.jayway.jsonpath.InvalidPathException;
+import com.jayway.jsonpath.internal.function.date.Format;
 import com.jayway.jsonpath.internal.function.json.Append;
 import com.jayway.jsonpath.internal.function.numeric.Average;
 import com.jayway.jsonpath.internal.function.numeric.Max;
@@ -39,6 +40,9 @@ public class PathFunctionFactory {
 
         // Text Functions
         map.put("concat", Concatenate.class);
+
+        // Temporal Functions
+        map.put("format", Format.class);
 
         // JSON Entity Functions
         map.put("length", Length.class);

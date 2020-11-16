@@ -19,6 +19,12 @@ import com.jayway.jsonpath.JsonPathException;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 import java.util.Iterator;
 
 public final class Utils {
@@ -396,6 +402,29 @@ public final class Utils {
             return null;
         }
         return o.toString();
+    }
+
+    //---------------------------------------------------------
+    //
+    // Temporal
+    //
+    //---------------------------------------------------------
+
+    /**
+     * <p>Try to parse text into one of the temporal types:</p>
+     * <ul>
+     *  <li>{@code LocalDateTime}</li>
+     *  <li>{@code LocalDate}</li>
+     *  <li>{@code LocalTime}</li>
+     * </ul>
+     *
+     * @param formatter the formatter with the desired pattern
+     * @param text the text to parse, not null
+     * @return the parsed date-time, not null
+     * @throws java.time.format.DateTimeParseException if unable to parse the requested result
+     */
+    public static TemporalAccessor parse(DateTimeFormatter formatter, CharSequence text) {
+        return formatter.parseBest(text, LocalDateTime::from, LocalDate::from, LocalTime::from);
     }
 
     private Utils() {

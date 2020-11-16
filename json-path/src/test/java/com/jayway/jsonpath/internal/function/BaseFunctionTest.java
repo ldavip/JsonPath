@@ -3,6 +3,7 @@ package com.jayway.jsonpath.internal.function;
 import com.jayway.jsonpath.Configuration;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import static com.jayway.jsonpath.JsonPath.using;
@@ -30,6 +31,34 @@ public class BaseFunctionTest {
     protected void verifyFunction(Configuration conf, String pathExpr, String json, Object expectedValue) {
         Object result = using(conf).parse(json).read(pathExpr);
         assertThat(conf.jsonProvider().unwrap(result)).isEqualTo(expectedValue);
+    }
+
+    /**
+     * Verify the function returns the correct array values based on the input expectedArray
+     *
+     * @param pathExpr
+     *      The path expression to execute
+     *
+     * @param json
+     *      The json document (actual content) to parse
+     *
+     * @param expectedArray
+     *      The expected array to be returned from the test
+     */
+    protected void verifyFunctionWithArrayResult(Configuration conf, String pathExpr, String json, Object expectedArray) {
+        Object result = conf.jsonProvider().unwrap(using(conf).parse(json).read(pathExpr));
+        if (conf.jsonProvider().isArray(result) && conf.jsonProvider().isArray(expectedArray)) {
+            assertThat(conf.jsonProvider().length(result)).isEqualTo(conf.jsonProvider().length(expectedArray));
+
+            Iterator<?> expectedObjects = conf.jsonProvider().toIterable(expectedArray).iterator();
+
+            Iterable<?> resultObjects = conf.jsonProvider().toIterable(result);
+            for (Object resultObj : resultObjects) {
+                assertThat(resultObj).isEqualTo(expectedObjects.next());
+            }
+        } else {
+            assertThat(result).isEqualTo(expectedArray);
+        }
     }
 
     protected void verifyMathFunction(Configuration conf, String pathExpr, Object expectedValue) {
