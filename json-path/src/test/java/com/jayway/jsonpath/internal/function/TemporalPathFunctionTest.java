@@ -2,6 +2,7 @@ package com.jayway.jsonpath.internal.function;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.Configurations;
+import com.jayway.jsonpath.JsonPathException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -80,6 +81,56 @@ public class TemporalPathFunctionTest extends BaseFunctionTest {
     @Test
     public void testFormatTime() {
         verifyFunction(conf, "$.time.format(\"HH:mm\", \"KK:mm a\")", DATE_SERIES, "05:57 PM");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testMinDateEmptyPattern() {
+        verifyFunction(conf, "$.dates.minDate()", DATE_SERIES, "12/26/2004");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testMinDateWrongPattern() {
+        verifyFunction(conf, "$.dates.minDate(\"dd/MM/yyyy\")", DATE_SERIES, "12/26/2004");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testMinDateEmptyArray() {
+        verifyFunction(conf, "$.empty.minDate(\"dd/MM/yyyy\")", DATE_SERIES, "");
+    }
+
+    @Test
+    public void testMinDate() {
+        verifyFunction(conf, "$.dates.minDate(\"MM/dd/yyyy\")", DATE_SERIES, "12/26/2004");
+    }
+
+    @Test
+    public void testMinDateWithArrayAsParameter() {
+        verifyFunction(conf, "$.minDate(\"MM/dd/yyyy\", $.dates)", DATE_SERIES, "12/26/2004");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testMaxDateEmptyPattern() {
+        verifyFunction(conf, "$.dates.maxDate()", DATE_SERIES, "07/12/2015");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testMaxDateWrongPattern() {
+        verifyFunction(conf, "$.dates.maxDate(\"dd/MM/yyyy\")", DATE_SERIES, "07/12/2015");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testMaxDateEmptyArray() {
+        verifyFunction(conf, "$.empty.maxDate(\"dd/MM/yyyy\")", DATE_SERIES, "");
+    }
+
+    @Test
+    public void testMaxDate() {
+        verifyFunction(conf, "$.dates.maxDate(\"MM/dd/yyyy\")", DATE_SERIES, "07/12/2015");
+    }
+
+    @Test
+    public void testMaxDateWithArrayAsParameter() {
+        verifyFunction(conf, "$.maxDate(\"MM/dd/yyyy\", $.dates)", DATE_SERIES, "07/12/2015");
     }
 
 }

@@ -2,12 +2,10 @@ package com.jayway.jsonpath.internal.function;
 
 import com.jayway.jsonpath.InvalidPathException;
 import com.jayway.jsonpath.internal.function.date.Format;
+import com.jayway.jsonpath.internal.function.date.MaxDate;
+import com.jayway.jsonpath.internal.function.date.MinDate;
 import com.jayway.jsonpath.internal.function.json.Append;
-import com.jayway.jsonpath.internal.function.numeric.Average;
-import com.jayway.jsonpath.internal.function.numeric.Max;
-import com.jayway.jsonpath.internal.function.numeric.Min;
-import com.jayway.jsonpath.internal.function.numeric.StandardDeviation;
-import com.jayway.jsonpath.internal.function.numeric.Sum;
+import com.jayway.jsonpath.internal.function.numeric.*;
 import com.jayway.jsonpath.internal.function.text.Concatenate;
 import com.jayway.jsonpath.internal.function.text.Length;
 
@@ -43,6 +41,8 @@ public class PathFunctionFactory {
 
         // Temporal Functions
         map.put("format", Format.class);
+        map.put("minDate", MinDate.class);
+        map.put("maxDate", MaxDate.class);
 
         // JSON Entity Functions
         map.put("length", Length.class);
