@@ -193,4 +193,26 @@ public class NestedFunctionTest extends BaseFunctionTest {
         verifyFunction(conf, "$.text.last()", TEXT_SERIES, "f");
     }
 
+    @Test(expected = JsonPathException.class)
+    public void testSliceArrayNoIndex() {
+        verifyFunction(conf, "$.text.slice()", TEXT_SERIES, "");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testSliceArrayInvalidIndex() {
+        verifyFunction(conf, "$.text.slice(3,1)", TEXT_SERIES, "");
+    }
+
+    @Test
+    public void testSliceArrayFromStartingIndex() {
+        Object expected = arrayOf(conf, Arrays.asList("d", "e", "f"));
+        verifyFunctionWithArrayResult(conf, "$.text.slice(3)", TEXT_SERIES, expected);
+    }
+
+    @Test
+    public void testSliceArray() {
+        Object expected = arrayOf(conf, Arrays.asList("b", "c", "d"));
+        verifyFunctionWithArrayResult(conf, "$.text.slice(1,4)", TEXT_SERIES, expected);
+    }
+
 }
