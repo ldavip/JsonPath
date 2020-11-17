@@ -338,6 +338,7 @@ public class FilterCompiler  {
     private PathNode readPath() {
         char previousSignificantChar = filter.previousSignificantChar();
         int begin = filter.position();
+        int openedParenthesis = 0;
 
         filter.incrementPosition(1); //skip $ and @
         while (filter.inBounds()) {
@@ -349,8 +350,14 @@ public class FilterCompiler  {
                     filter.setPosition(closingSquareBracketIndex + 1);
                 }
             }
+            if (filter.currentChar() == OPEN_PARENTHESIS) {
+            	openedParenthesis++;
+            }
             boolean closingFunctionBracket = (filter.currentChar() == CLOSE_PARENTHESIS && currentCharIsClosingFunctionBracket(begin));
-            boolean closingLogicalBracket  = (filter.currentChar() == CLOSE_PARENTHESIS && !closingFunctionBracket);
+            boolean closingLogicalBracket  = (filter.currentChar() == CLOSE_PARENTHESIS && openedParenthesis == 0 && !closingFunctionBracket);
+            if (filter.currentChar() == CLOSE_PARENTHESIS && openedParenthesis > 0) {
+            	openedParenthesis--;
+            }
 
             if (!filter.inBounds() || isRelationalOperatorChar(filter.currentChar()) || filter.currentChar() == SPACE || closingLogicalBracket) {
                 break;
