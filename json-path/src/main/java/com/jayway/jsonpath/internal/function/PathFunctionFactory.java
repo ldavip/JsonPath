@@ -1,6 +1,7 @@
 package com.jayway.jsonpath.internal.function;
 
 import com.jayway.jsonpath.InvalidPathException;
+import com.jayway.jsonpath.internal.function.array.First;
 import com.jayway.jsonpath.internal.function.array.Get;
 import com.jayway.jsonpath.internal.function.date.Format;
 import com.jayway.jsonpath.internal.function.date.MaxDate;
@@ -46,6 +47,7 @@ public class PathFunctionFactory {
 
         // Array Functions
         map.put("get", Get.class);
+        map.put("first", First.class);
 
         // Temporal Functions
         map.put("format", Format.class);

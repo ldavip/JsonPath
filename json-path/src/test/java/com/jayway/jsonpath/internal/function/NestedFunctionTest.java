@@ -183,4 +183,9 @@ public class NestedFunctionTest extends BaseFunctionTest {
         verifyFunction(conf, "$.text.get(2)", TEXT_SERIES, "c");
     }
 
+    @Test
+    public void testFirstFunction() {
+        verifyFunction(conf, "$.text.first()", TEXT_SERIES, "a");
+    }
+
 }
