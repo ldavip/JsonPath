@@ -168,4 +168,19 @@ public class NestedFunctionTest extends BaseFunctionTest {
         verifyFunction(conf, "$.text.trim()", json, "abc def");
     }
 
+    @Test(expected = JsonPathException.class)
+    public void testGetFunctionIndexOutOfBounds() {
+        verifyFunction(conf, "$.text.get(6)", TEXT_SERIES, "");
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testGetFunctionNoIndex() {
+        verifyFunction(conf, "$.text.get()", TEXT_SERIES, "");
+    }
+
+    @Test
+    public void testGetFunction() {
+        verifyFunction(conf, "$.text.get(2)", TEXT_SERIES, "c");
+    }
+
 }
