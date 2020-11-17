@@ -2,11 +2,14 @@ package com.jayway.jsonpath.internal.function;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.Configurations;
+import com.jayway.jsonpath.JsonPathException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 import static com.jayway.jsonpath.JsonPath.using;
 import static org.junit.Assert.assertTrue;
@@ -128,6 +131,29 @@ public class NestedFunctionTest extends BaseFunctionTest {
         catch (Exception e) {
             assertTrue(e.getMessage().startsWith("Arguments to function: 'append'"));
         }
+    }
+
+    @Test(expected = JsonPathException.class)
+    public void testStringSplitWithoutRegex() {
+        verifyFunctionWithArrayResult(conf, "$.text.concat().split()", TEXT_SERIES, null);
+    }
+
+    @Test
+    public void testStringSplit() {
+        Object expected = arrayOf(conf, Arrays.asList("abcdef", "ghijk"));
+        verifyFunctionWithArrayResult(conf, "$.concat(\"abcdef\", \" \", \"ghijk\").split(\" \")", TEXT_SERIES, expected);
+    }
+
+    @Test
+    public void testStringSplitWithRegex() {
+        Object expected = arrayOf(conf, Arrays.asList("abc", "def ", " ghi", "jk"));
+        verifyFunctionWithArrayResult(conf, "$.concat(\"abc1def\", \" 2 \", \"ghi3jk\").split(\"\\d\")", TEXT_SERIES, expected);
+    }
+
+    @Test
+    public void testStringSplitWithEmptyString() {
+        Object expected = arrayOf(conf, Arrays.asList("a", "b", "c", "d", "e", "f"));
+        verifyFunctionWithArrayResult(conf, "$.text.concat().split(\"\")", TEXT_SERIES, expected);
     }
 
 }

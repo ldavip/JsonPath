@@ -1,6 +1,10 @@
 package com.jayway.jsonpath.internal.function;
 
 import com.jayway.jsonpath.InvalidPathException;
+import com.jayway.jsonpath.internal.function.array.First;
+import com.jayway.jsonpath.internal.function.array.Get;
+import com.jayway.jsonpath.internal.function.array.Last;
+import com.jayway.jsonpath.internal.function.array.Slice;
 import com.jayway.jsonpath.internal.function.date.Format;
 import com.jayway.jsonpath.internal.function.date.MaxDate;
 import com.jayway.jsonpath.internal.function.date.MinDate;
@@ -8,6 +12,8 @@ import com.jayway.jsonpath.internal.function.json.Append;
 import com.jayway.jsonpath.internal.function.numeric.*;
 import com.jayway.jsonpath.internal.function.text.Concatenate;
 import com.jayway.jsonpath.internal.function.text.Length;
+import com.jayway.jsonpath.internal.function.text.Split;
+import com.jayway.jsonpath.internal.function.text.Trim;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,6 +44,7 @@ public class PathFunctionFactory {
 
         // Text Functions
         map.put("concat", Concatenate.class);
+        map.put("split", Split.class);
 
         // Temporal Functions
         map.put("format", Format.class);
