@@ -4,6 +4,7 @@ import com.jayway.jsonpath.Configuration;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.jayway.jsonpath.JsonPath.using;
@@ -71,5 +72,14 @@ public class BaseFunctionTest {
 
     protected String getResourceAsText(String resourceName) throws IOException {
         return new Scanner(BaseFunctionTest.class.getResourceAsStream(resourceName), "UTF-8").useDelimiter("\\A").next();
+    }
+
+    protected Object arrayOf(Configuration conf, List<Object> objects) {
+        Object array = conf.jsonProvider().createArray();
+        int idx = 0;
+        for (Object obj : objects) {
+            conf.jsonProvider().setArrayIndex(array, idx++, obj);
+        }
+        return array;
     }
 }

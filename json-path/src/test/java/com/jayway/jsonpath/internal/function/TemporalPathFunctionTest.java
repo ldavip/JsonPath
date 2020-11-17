@@ -9,6 +9,8 @@ import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 import static org.junit.runners.Parameterized.Parameters;
 
 /**
@@ -36,12 +38,7 @@ public class TemporalPathFunctionTest extends BaseFunctionTest {
     }
 
     private Object arrayOf(Object... objects) {
-        Object array = conf.jsonProvider().createArray();
-        int idx = 0;
-        for (Object obj : objects) {
-            conf.jsonProvider().setArrayIndex(array, idx++, obj);
-        }
-        return array;
+        return arrayOf(conf, Arrays.asList(objects));
     }
 
     @Parameters
