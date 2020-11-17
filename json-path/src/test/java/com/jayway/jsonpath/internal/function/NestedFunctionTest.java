@@ -156,4 +156,16 @@ public class NestedFunctionTest extends BaseFunctionTest {
         verifyFunctionWithArrayResult(conf, "$.text.concat().split(\"\")", TEXT_SERIES, expected);
     }
 
+    @Test(expected = JsonPathException.class)
+    public void testStringTrimNonString() {
+        String json = "{ \"text\": {} }";
+        verifyFunction(conf, "$.text.trim()", json, "abc def");
+    }
+
+    @Test
+    public void testStringTrim() {
+        String json = "{ \"text\": \"     abc def    \" }";
+        verifyFunction(conf, "$.text.trim()", json, "abc def");
+    }
+
 }
