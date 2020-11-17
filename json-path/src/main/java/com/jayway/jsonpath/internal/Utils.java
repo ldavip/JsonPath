@@ -84,6 +84,20 @@ public final class Utils {
 
     }
 
+    /**
+     * Remove starting and ending [", '] from string
+     *
+     * @param text Text to normalize
+     * @return Text without first and last chars [",']
+     */
+    public static String normalizeString(String text) {
+        if (text.startsWith("\"") && text.endsWith("\"")
+                || text.startsWith("'") && text.endsWith("'")) {
+            return text.substring(1, text.length() - 1);
+        }
+        return text;
+    }
+
     //---------------------------------------------------------
     //
     // IO
