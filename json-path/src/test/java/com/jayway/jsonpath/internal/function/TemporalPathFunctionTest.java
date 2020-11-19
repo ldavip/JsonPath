@@ -80,6 +80,38 @@ public class TemporalPathFunctionTest extends BaseFunctionTest {
         verifyFunction(conf, "$.time.format(\"HH:mm\", \"KK:mm a\")", DATE_SERIES, "05:57 PM");
     }
 
+    @Test
+    public void testFormatSingleArg() {
+        verifyFunction(conf, "$.format(\"HH:mm\", \"KK:mm a\", $.time)", DATE_SERIES, "05:57 PM");
+    }
+
+    @Test
+    public void testFormatArgs() {
+        Object expected = arrayOf("10:50 AM", "11:50 AM", "01:50 PM");
+        verifyFunctionWithArrayResult(conf, "$.format(\"HH:mm\", \"KK:mm a\", \"10:50\", \"11:50\", \"13:50\")", DATE_SERIES, expected);
+    }
+
+    @Test
+    public void testFormatArrayArg() {
+        String json = "{ \"times\": [ \"10:50\", \"11:50\", \"13:50\" ] }";
+        Object expected = arrayOf("10:50 AM", "11:50 AM", "01:50 PM");
+        verifyFunctionWithArrayResult(conf, "$.format(\"HH:mm\", \"KK:mm a\", $.times)", json, expected);
+    }
+
+    @Test
+    public void testFormatResultArrayArg() {
+        String json = "{ \"objects\": [ { \"time\": \"10:50\" }, { \"time\": \"11:50\" }, { \"time\": \"13:50\" } ] }";
+        Object expected = arrayOf("10:50 AM", "11:50 AM", "01:50 PM");
+        verifyFunctionWithArrayResult(conf, "$.format(\"HH:mm\", \"KK:mm a\", $.objects[0:3].time)", json, expected);
+    }
+
+    @Test
+    public void testFormatResultArrayChain() {
+        String json = "{ \"objects\": [ { \"time\": \"10:50\" }, { \"time\": \"11:50\" }, { \"time\": \"13:50\" } ] }";
+        Object expected = arrayOf("10:50 AM", "11:50 AM", "01:50 PM");
+        verifyFunctionWithArrayResult(conf, "$.objects[0:3].time.format(\"HH:mm\", \"KK:mm a\")", json, expected);
+    }
+
     @Test(expected = JsonPathException.class)
     public void testMinDateEmptyPattern() {
         verifyFunction(conf, "$.dates.minDate()", DATE_SERIES, "12/26/2004");
