@@ -77,14 +77,23 @@ Functions
 Functions can be invoked at the tail end of a path - the input to a function is the output of the path expression.
 The function output is dictated by the function itself.
 
-| Function                  | Description                                                         | Output    |
-| :------------------------ | :------------------------------------------------------------------ |-----------|
-| min()                     | Provides the min value of an array of numbers                       | Double    |
-| max()                     | Provides the max value of an array of numbers                       | Double    |
-| avg()                     | Provides the average value of an array of numbers                   | Double    |
-| stddev()                  | Provides the standard deviation value of an array of numbers        | Double    |
-| length()                  | Provides the length of an array                                     | Integer   |
-| sum()                     | Provides the sum value of an array of numbers                       | Double    |
+| Function                  | Description                                                                                            | Output    |
+| :------------------------ | :----------------------------------------------------------------------------------------------------- |-----------|
+| min()                     | Provides the min value of an array of numbers                                                          | Double    |
+| max()                     | Provides the max value of an array of numbers                                                          | Double    |
+| avg()                     | Provides the average value of an array of numbers                                                      | Double    |
+| stddev()                  | Provides the standard deviation value of an array of numbers                                           | Double    |
+| length()                  | Provides the length of an array                                                                        | Integer   |
+| sum()                     | Provides the sum value of an array of numbers                                                          | Double    |
+| minDate(pattern)          | Provides the min value of an array of dates parsing by pattern                                         | String    |
+| maxDate(pattern)          | Provides the max value of an array of dates parsing by pattern                                         | String    |
+| format(source, target)    | Provides the formatted date value according to given patterns                                          | String    |
+| trim()                    | Provides the value with leading and trailing whitespace omitted                                        | String    |
+| split(regex)              | Splits the value around matches of the given regular expression                                        | Array     |
+| first()                   | Provides the first value of given array                                                                | Object    |
+| last()                    | Provides the last value of given array                                                                 | Object    |
+| get(index)                | Provides the value at the specified index of given array                                               | Object    |
+| slice(fromIndex, toIndex) | Provides the portion of given array between the specified fromIndex, inclusive, and toIndex, exclusive | Array     |
 
 
 Filter Operators
