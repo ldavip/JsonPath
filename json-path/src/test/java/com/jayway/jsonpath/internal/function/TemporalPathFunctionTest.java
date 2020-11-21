@@ -112,6 +112,19 @@ public class TemporalPathFunctionTest extends BaseFunctionTest {
         verifyFunctionWithArrayResult(conf, "$.objects[0:3].time.format(\"HH:mm\", \"KK:mm a\")", json, expected);
     }
 
+    @Test
+    public void testFormatDefiniteArg() {
+        String json = "{ \"times\": [ \"10:50\", \"11:50\", \"13:50\" ] }";
+        verifyFunctionWithArrayResult(conf, "$.format(\"HH:mm\", \"KK:mm a\", $.times[0])", json, "10:50 AM");
+    }
+
+    @Test
+    public void testFormatIndefiniteArg() {
+        String json = "{ \"times\": [ \"10:50\", \"11:50\", \"13:50\" ] }";
+        Object expected = arrayOf("10:50 AM");
+        verifyFunctionWithArrayResult(conf, "$.format(\"HH:mm\", \"KK:mm a\", $..times[0])", json, expected);
+    }
+
     @Test(expected = JsonPathException.class)
     public void testMinDateEmptyPattern() {
         verifyFunction(conf, "$.dates.minDate()", DATE_SERIES, "12/26/2004");

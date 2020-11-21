@@ -44,7 +44,7 @@ public class Format implements PathFunction {
         List<Parameter> parametersLeft = parameters.subList(2, parameters.size());
 
         if (parametersLeft.size() > 1) {
-            List<String> objects = Parameter.toList(String.class, ctx, parametersLeft);
+            List<Object> objects = Parameter.toList(Object.class, ctx, parametersLeft);
             result = readArray(ctx, sourceFormatter, targetFormatter, objects);
         } else if (parametersLeft.size() == 1) {
             Object value = parametersLeft.get(0).getValue();
@@ -83,14 +83,15 @@ public class Format implements PathFunction {
         int idx = 0;
         for (Object obj : iterable) {
             if (obj != null) {
+                String strObj = Utils.normalizeString(obj.toString());
                 String value;
                 try {
-                    value = targetFormatter.format(Utils.parse(sourceFormatter, obj.toString()));
+                    value = targetFormatter.format(Utils.parse(sourceFormatter, strObj));
                 } catch (DateTimeParseException e) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Unable to parse value {}, error: {}", obj, e.getMessage());
+                        logger.debug("Unable to parse value {}, error: {}", strObj, e.getMessage());
                     }
-                    value = obj.toString();
+                    value = strObj;
                 }
                 ctx.configuration().jsonProvider()
                         .setArrayIndex(array, idx++, value);
