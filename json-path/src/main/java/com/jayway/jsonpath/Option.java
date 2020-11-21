@@ -83,6 +83,13 @@ public enum Option {
      * If REQUIRE_PROPERTIES option is present PathNotFoundException is thrown.
      * If REQUIRE_PROPERTIES option is not present ["b-val"] is returned.
      */
-    REQUIRE_PROPERTIES
+    REQUIRE_PROPERTIES,
+
+    /**
+     * <p>Makes this implementation behave as first intended.</p>
+     * <p>This was the default behaviour, but, was changed due to new functions added.</p>
+     * <p>Now we have functions with required arguments and therefore should be evaluated every time.</p>
+     */
+    EVALUATE_PARAMETERS_ONLY_ONCE
 
 }

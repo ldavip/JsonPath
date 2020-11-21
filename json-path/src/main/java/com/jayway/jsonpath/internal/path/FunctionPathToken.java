@@ -1,5 +1,6 @@
 package com.jayway.jsonpath.internal.path;
 
+import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.internal.PathRef;
 import com.jayway.jsonpath.internal.function.Parameter;
 import com.jayway.jsonpath.internal.function.PathFunction;
@@ -48,9 +49,11 @@ public class FunctionPathToken extends PathToken {
 
     private void evaluateParameters(String currentPath, PathRef parent, Object model, EvaluationContextImpl ctx) {
 
+        boolean optEvaluateParametersOnlyOnce = ctx.configuration().containsOption(Option.EVALUATE_PARAMETERS_ONLY_ONCE);
+
         if (null != functionParams) {
             for (Parameter param : functionParams) {
-                if (!param.hasEvaluated()) {
+                if (!param.hasEvaluated() || !optEvaluateParametersOnlyOnce) {
                     switch (param.getType()) {
                         case PATH:
                             param.setLateBinding(new PathLateBindingValue(param.getPath(), ctx.rootDocument(), ctx.configuration()));
