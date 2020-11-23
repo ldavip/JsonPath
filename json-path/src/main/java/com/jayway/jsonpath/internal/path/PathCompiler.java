@@ -268,11 +268,14 @@ public class PathCompiler {
                     continue;
                 }
 
-                if (c == OPEN_BRACE || isDigit(c) || DOUBLE_QUOTE == c || c == PARAM_CONTEXT) {
+                if (c == OPEN_BRACE || isDigit(c) || DOUBLE_QUOTE == c) {
                     type = ParamType.JSON;
                 }
                 else if (isPathContext(c)) {
                     type = ParamType.PATH; // read until we reach a terminating comma and we've reset grouping to zero
+                }
+                else if (c == PARAM_CONTEXT) {
+                    type = ParamType.CONTEXT;
                 }
             }
 
@@ -330,6 +333,10 @@ public class PathCompiler {
                             if (null != type) {
                                 Parameter param = null;
                                 switch (type) {
+                                    case CONTEXT:
+                                        // add double quotes to escape '?' when parsing the json
+                                        param = new Parameter("\"" + parameter.toString() + "\"");
+                                        break;
                                     case JSON:
                                         // parse the json and set the value
                                         param = new Parameter(parameter.toString());
