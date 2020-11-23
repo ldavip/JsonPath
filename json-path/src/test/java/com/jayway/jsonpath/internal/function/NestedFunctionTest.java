@@ -88,6 +88,13 @@ public class NestedFunctionTest extends BaseFunctionTest {
     }
 
     @Test
+    public void testConcatWithParamContext() {
+        String json = "{ \"obj\": { \"str1\": \"abc\", \"str2\": \"def\" } }";
+        String pathExpr = "$.obj.concat(?.str1, \" \", ?.str2)";
+        verifyFunction(conf, pathExpr, json, "abc def");
+    }
+
+    @Test
     public void testAppendNumber() {
         verifyMathFunction(conf, "$.numbers.append(11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0).avg()", 10.0);
     }
