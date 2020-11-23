@@ -2,18 +2,9 @@ package com.jayway.jsonpath.internal;
 
 import com.jayway.jsonpath.InvalidPathException;
 
-public class CharacterIndex {
+import static com.jayway.jsonpath.internal.Symbols.*;
 
-    private static final char OPEN_PARENTHESIS = '(';
-    private static final char CLOSE_PARENTHESIS = ')';
-    private static final char CLOSE_SQUARE_BRACKET = ']';
-    private static final char SPACE = ' ';
-    private static final char ESCAPE = '\\';
-    private static final char SINGLE_QUOTE = '\'';
-    private static final char DOUBLE_QUOTE = '"';
-    private static final char MINUS = '-';
-    private static final char PERIOD = '.';
-    private static final char REGEX = '/';
+public class CharacterIndex {
 
     private final CharSequence charSequence;
     private int position;
