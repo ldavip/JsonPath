@@ -1,5 +1,6 @@
 package com.jayway.jsonpath.internal.function.numeric;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import com.jayway.jsonpath.JsonPathException;
@@ -32,9 +33,12 @@ public abstract class AbstractNumberAggregation extends AbstractAggregation<Numb
             }
         }
         if (parameters != null) {
-            for (Number value : Parameter.toList(Number.class, ctx, parameters)) {
-                count++;
-                next(value);
+            for (Object value : Parameter.toList(Object.class, ctx, parameters)) {
+                try {
+                    next(NumberFormat.getInstance().parse(value.toString()));
+                    count++;
+                } catch (Exception ignored) {
+                }
             }
         }
         if (count != 0) {
