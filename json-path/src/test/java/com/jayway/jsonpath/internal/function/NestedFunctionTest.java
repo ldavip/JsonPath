@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(Parameterized.class)
 public class NestedFunctionTest extends BaseFunctionTest {
-    private static final Logger logger = LoggerFactory.getLogger(NumericPathFunctionTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(NestedFunctionTest.class);
 
     private Configuration conf = Configurations.GSON_CONFIGURATION;
 
@@ -131,41 +131,6 @@ public class NestedFunctionTest extends BaseFunctionTest {
         catch (Exception e) {
             assertTrue(e.getMessage().startsWith("Arguments to function: 'append'"));
         }
-    }
-
-    @Test(expected = JsonPathException.class)
-    public void testStringSplitWithoutRegex() {
-        verifyFunctionWithArrayResult(conf, "$.text.concat().split()", TEXT_SERIES, null);
-    }
-
-    @Test
-    public void testStringSplit() {
-        Object expected = arrayOf(conf, Arrays.asList("abcdef", "ghijk"));
-        verifyFunctionWithArrayResult(conf, "$.concat(\"abcdef\", \" \", \"ghijk\").split(\" \")", TEXT_SERIES, expected);
-    }
-
-    @Test
-    public void testStringSplitWithRegex() {
-        Object expected = arrayOf(conf, Arrays.asList("abc", "def ", " ghi", "jk"));
-        verifyFunctionWithArrayResult(conf, "$.concat(\"abc1def\", \" 2 \", \"ghi3jk\").split(\"\\d\")", TEXT_SERIES, expected);
-    }
-
-    @Test
-    public void testStringSplitWithEmptyString() {
-        Object expected = arrayOf(conf, Arrays.asList("a", "b", "c", "d", "e", "f"));
-        verifyFunctionWithArrayResult(conf, "$.text.concat().split(\"\")", TEXT_SERIES, expected);
-    }
-
-    @Test(expected = JsonPathException.class)
-    public void testStringTrimNonString() {
-        String json = "{ \"text\": {} }";
-        verifyFunction(conf, "$.text.trim()", json, "abc def");
-    }
-
-    @Test
-    public void testStringTrim() {
-        String json = "{ \"text\": \"     abc def    \" }";
-        verifyFunction(conf, "$.text.trim()", json, "abc def");
     }
 
     @Test(expected = JsonPathException.class)
