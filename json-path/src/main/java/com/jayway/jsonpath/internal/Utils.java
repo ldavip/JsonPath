@@ -51,7 +51,7 @@ public final class Utils {
         return join(delimiter, "", objs);
     }
 
-    public static String concat(char... chars) {
+    public static String concatChars(char... chars) {
         return Stream.of(chars).map(String::valueOf).collect(Collectors.joining());
     }
 
@@ -452,7 +452,7 @@ public final class Utils {
         if (param == null) {
             return false;
         }
-        return normalizeString(param.toString()).startsWith(concat(PARAM_CONTEXT, PERIOD));
+        return normalizeString(param.toString()).startsWith(concatChars(PARAM_CONTEXT, PERIOD));
     }
 
     private Utils() {
