@@ -35,6 +35,23 @@ public class BaseFunctionTest {
     }
 
     /**
+     * Verify the function returns the correct string result based on the input expectedValue
+     *
+     * @param pathExpr
+     *      The path expression to execute
+     *
+     * @param json
+     *      The json document (actual content) to parse
+     *
+     * @param expectedValue
+     *      The expected string value to be returned from the test
+     */
+    protected void verifyFunctionAsString(Configuration conf, String pathExpr, String json, String expectedValue) {
+        Object result = using(conf).parse(json).read(pathExpr);
+        assertThat(String.valueOf(conf.jsonProvider().unwrap(result))).isEqualTo(expectedValue);
+    }
+
+    /**
      * Verify the function returns the correct array values based on the input expectedArray
      *
      * @param pathExpr
