@@ -91,15 +91,22 @@ public final class Utils {
 
     }
 
+    public static boolean isLiteralAsJson(String text) {
+        return text != null && (text.startsWith("\"") && text.endsWith("\"")) || (text.startsWith("'") && text.endsWith("'"));
+    }
+
     /**
-     * Remove starting and ending [", '] from string
+     * Remove starting and ending [", '] from string and also normalize escaped double quote
      *
      * @param text Text to normalize
      * @return Text without first and last chars [",']
      */
     public static String normalizeString(String text) {
-        if (text.startsWith("\"") && text.endsWith("\"")
-                || text.startsWith("'") && text.endsWith("'")) {
+        if (text == null || text.replace("\\\"", "\"").length() < 2) {
+            return text;
+        }
+        if (isLiteralAsJson(text)) {
+            text = text.replace("\\\"", "\"");
             return text.substring(1, text.length() - 1);
         }
         return text;
