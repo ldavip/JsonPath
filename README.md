@@ -62,6 +62,7 @@ Operators
 | :------------------------ | :----------------------------------------------------------------- |
 | `$`                       | The root element to query. This starts all path expressions.       |
 | `@`                       | The current node being processed by a filter predicate.            |
+| `?`                       | The current node being processed by a function.            |
 | `*`                       | Wildcard. Available anywhere a name or numeric are required.       |
 | `..`                      | Deep scan. Available anywhere a name is required.                  |
 | `.<name>`                 | Dot-notated child                                                  |
@@ -88,11 +89,13 @@ The function output is dictated by the function itself.
 | minDate(pattern)          | Provides the min value of an array of dates parsing by pattern                                         | String    |
 | maxDate(pattern)          | Provides the max value of an array of dates parsing by pattern                                         | String    |
 | format(source, target)    | Provides the formatted date value according to given patterns                                          | String    |
+| concat()                  | Provides the elements of given array joined together                                                   | String    |
 | trim()                    | Provides the value with leading and trailing whitespace omitted                                        | String    |
 | split(regex)              | Splits the value around matches of the given regular expression                                        | Array     |
 | first()                   | Provides the first value of given array                                                                | Object    |
 | last()                    | Provides the last value of given array                                                                 | Object    |
 | get(index)                | Provides the value at the specified index of given array                                               | Object    |
+| join(delimiter)           | Provides the elements of given array joined together with a copy of the specified delimiter            | String    |
 | slice(fromIndex, toIndex) | Provides the portion of given array between the specified fromIndex, inclusive, and toIndex, exclusive | Array     |
 
 
