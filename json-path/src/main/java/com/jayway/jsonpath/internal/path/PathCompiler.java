@@ -280,13 +280,13 @@ public class PathCompiler {
             }
 
             if (c == DOUBLE_QUOTE) {
+                if (priorChar == '\\' && groupQuote == 0) {
+                    throw new InvalidPathException("Unexpected quote '\"' at character position: " + path.position());
+                }
                 if (priorChar != '\\' && groupQuote > 0) {
-                    if (groupQuote == 0) {
-                        throw new InvalidPathException("Unexpected quote '\"' at character position: " + path.position());
-                    }
                     groupQuote--;
                 }
-                else {
+                else if (priorChar != '\\') {
                     groupQuote++;
                 }
             } else if (groupQuote == 0) {
@@ -363,7 +363,7 @@ public class PathCompiler {
                 }
             }
 
-            if (type != null && !(c == COMMA && 0 == groupBrace && 0 == groupBracket && 1 == groupParen)) {
+            if (groupQuote == 1 || (type != null && !(c == COMMA && 0 == groupBrace && 0 == groupBracket && 1 == groupParen))) {
                 parameter.append(c);
             }
             priorChar = c;
