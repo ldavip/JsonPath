@@ -17,7 +17,7 @@ public class Trim implements PathFunction {
         Object result = model;
         if (parameters != null && !parameters.isEmpty()) {
             if (parameters.size() > 1) {
-                result = readArray(ctx, Parameter.toList(Object.class, ctx, parameters)); //parameters.stream().map(Parameter::getValue).collect(Collectors.toList()));
+                result = readArray(ctx, Parameter.toList(Object.class, ctx, parameters));
             } else {
                 Object value = parameters.get(0).getValue();
                 if (ctx.configuration().jsonProvider().isArray(value)) {
