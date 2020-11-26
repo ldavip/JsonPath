@@ -33,8 +33,8 @@ public class Format implements PathFunction {
             throw new JsonPathException("Format function should have parameters (sourcePattern, targetPattern)");
         }
 
-        String sourcePattern = parameters.get(0).getValue().toString().replace("\"", "");
-        String targetPattern = parameters.get(1).getValue().toString().replace("\"", "");
+        String sourcePattern = Utils.normalizeString(parameters.get(0).getValue(model).toString());
+        String targetPattern = Utils.normalizeString(parameters.get(1).getValue(model).toString());
 
         DateTimeFormatter sourceFormatter = getFormatterFromCache(sourcePattern);
         DateTimeFormatter targetFormatter = getFormatterFromCache(targetPattern);
@@ -44,10 +44,10 @@ public class Format implements PathFunction {
         List<Parameter> parametersLeft = parameters.subList(2, parameters.size());
 
         if (parametersLeft.size() > 1) {
-            List<Object> objects = Parameter.toList(Object.class, ctx, parametersLeft);
+            List<Object> objects = Parameter.toList(Object.class, ctx, parametersLeft, model);
             result = readArray(ctx, sourceFormatter, targetFormatter, objects);
         } else if (parametersLeft.size() == 1) {
-            Object value = parametersLeft.get(0).getValue();
+            Object value = parametersLeft.get(0).getValue(model);
             if (ctx.configuration().jsonProvider().isArray(value)) {
                 List<Object> list = new ArrayList<>();
                 Parameter.consume(Object.class, ctx, list, value);

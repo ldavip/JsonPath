@@ -326,7 +326,7 @@ public class PathCompiler {
                     case COMMA:
                         // In this state we've reach the end of a function parameter and we can pass along the parameter string
                         // to the parser
-                        if ((0 == groupQuote && 0 == groupBrace && 0 == groupBracket
+                        if (((!path.inBounds() || !path.currentCharIs(PERIOD) || groupParen == 0) && 0 == groupQuote && 0 == groupBrace && 0 == groupBracket
                                 && ((0 == groupParen && CLOSE_PARENTHESIS == c) || 1 == groupParen))) {
                             endOfStream = (0 == groupParen);
 
@@ -334,8 +334,13 @@ public class PathCompiler {
                                 Parameter param = null;
                                 switch (type) {
                                     case CONTEXT:
-                                        // add double quotes to escape '?' when parsing the json
-                                        param = new Parameter("\"" + parameter.toString() + "\"");
+                                        // In case last char of parameter is ')' closing inner function
+                                        // append it to the path
+                                        if (c == CLOSE_PARENTHESIS && groupParen == 1) {
+                                            parameter.append(c);
+                                        }
+                                        param = new Parameter(new PathCompiler(DOC_CONTEXT + parameter.substring(1), new LinkedList<>()).compile());
+                                        param.setType(ParamType.CONTEXT);
                                         break;
                                     case JSON:
                                         // parse the json and set the value

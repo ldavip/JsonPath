@@ -20,7 +20,7 @@ public class Last implements PathFunction {
 
         Object result = model;
         if (parameters != null && !parameters.isEmpty()) {
-            List<Object> objects = Parameter.toList(Object.class, ctx, parameters);
+            List<Object> objects = Parameter.toList(Object.class, ctx, parameters, model);
             if (!objects.isEmpty()) {
                 return objects.get(objects.size() - 1);
             }

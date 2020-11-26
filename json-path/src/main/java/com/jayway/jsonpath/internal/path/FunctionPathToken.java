@@ -6,10 +6,10 @@ import com.jayway.jsonpath.internal.function.Parameter;
 import com.jayway.jsonpath.internal.function.PathFunction;
 import com.jayway.jsonpath.internal.function.PathFunctionFactory;
 import com.jayway.jsonpath.internal.function.latebinding.JsonLateBindingValue;
+import com.jayway.jsonpath.internal.function.latebinding.ParamPathLateBindingValue;
 import com.jayway.jsonpath.internal.function.latebinding.PathLateBindingValue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,6 +55,10 @@ public class FunctionPathToken extends PathToken {
             for (Parameter param : functionParams) {
                 if (!param.hasEvaluated() || !optEvaluateParametersOnlyOnce) {
                     switch (param.getType()) {
+                        case CONTEXT:
+                            param.setLateBinding(new ParamPathLateBindingValue(param.getPath(), ctx.configuration()));
+                            param.setEvaluated(true);
+                            break;
                         case PATH:
                             param.setLateBinding(new PathLateBindingValue(param.getPath(), ctx.rootDocument(), ctx.configuration()));
                             param.setEvaluated(true);

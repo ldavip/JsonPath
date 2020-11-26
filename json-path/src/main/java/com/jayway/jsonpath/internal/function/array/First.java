@@ -20,7 +20,7 @@ public class First implements PathFunction {
                          List<Parameter> parameters) {
 
         if (parameters != null && !parameters.isEmpty()) {
-            List<Object> objects = Parameter.toList(Object.class, ctx, parameters);
+            List<Object> objects = Parameter.toList(Object.class, ctx, parameters, model);
             return objects.get(0);
         } else if (ctx.configuration().jsonProvider().isArray(model)) {
             Iterable<?> objects = ctx.configuration().jsonProvider().toIterable(model);

@@ -3,6 +3,7 @@ package com.jayway.jsonpath.internal.function.array;
 import com.jayway.jsonpath.JsonPathException;
 import com.jayway.jsonpath.internal.EvaluationContext;
 import com.jayway.jsonpath.internal.PathRef;
+import com.jayway.jsonpath.internal.Utils;
 import com.jayway.jsonpath.internal.function.Parameter;
 import com.jayway.jsonpath.internal.function.PathFunction;
 
@@ -27,14 +28,14 @@ public class Slice implements PathFunction {
         int idxFinal = Integer.MAX_VALUE;
 
         try {
-            idxInitial = Integer.parseInt(parameters.get(0).getValue().toString());
+            idxInitial = Integer.parseInt(Utils.normalizeString(parameters.get(0).getValue(model).toString()));
         } catch (Exception e) {
             throw new JsonPathException("Slice function starting index invalid");
         }
 
         if (parameters.size() > 1) {
             try {
-                idxFinal = Integer.parseInt(parameters.get(1).getValue().toString());
+                idxFinal = Integer.parseInt(Utils.normalizeString(parameters.get(1).getValue(model).toString()));
                 if (idxFinal < idxInitial) {
                     throw new JsonPathException("Slice function final index before initial index");
                 }

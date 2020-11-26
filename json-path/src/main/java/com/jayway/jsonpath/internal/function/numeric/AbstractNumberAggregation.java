@@ -33,7 +33,7 @@ public abstract class AbstractNumberAggregation extends AbstractAggregation<Numb
             }
         }
         if (parameters != null) {
-            for (Object value : Parameter.toList(Object.class, ctx, parameters)) {
+            for (Object value : Parameter.toList(Object.class, ctx, parameters, model)) {
                 try {
                     next(NumberFormat.getInstance().parse(value.toString()));
                     count++;

@@ -3,6 +3,7 @@ package com.jayway.jsonpath.internal.function.array;
 import com.jayway.jsonpath.JsonPathException;
 import com.jayway.jsonpath.internal.EvaluationContext;
 import com.jayway.jsonpath.internal.PathRef;
+import com.jayway.jsonpath.internal.Utils;
 import com.jayway.jsonpath.internal.function.Parameter;
 import com.jayway.jsonpath.internal.function.PathFunction;
 
@@ -22,7 +23,7 @@ public class Get implements PathFunction {
         if (parameters == null || parameters.isEmpty()) {
             throw new JsonPathException("Get function attempted to retrieve non specified index");
         }
-        String param = parameters.get(0).getValue().toString();
+        String param = Utils.normalizeString(parameters.get(0).getValue(model).toString());
         int index;
         try {
             index = Integer.parseInt(param);

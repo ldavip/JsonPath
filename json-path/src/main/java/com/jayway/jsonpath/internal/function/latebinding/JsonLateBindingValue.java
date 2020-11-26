@@ -37,7 +37,7 @@ public class JsonLateBindingValue implements ILateBindingValue {
      * @return the late value
      */
     @Override
-    public Object get() {
+    public Object get(Object currentDocument) {
         return jsonProvider.parse(jsonParameter.getJson());
     }
 }

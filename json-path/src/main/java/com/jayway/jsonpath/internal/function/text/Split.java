@@ -23,7 +23,7 @@ public class Split implements PathFunction {
 		String regex = Utils.normalizeString(parameters.get(0).getJson());
 
 		if (parameters.size() == 2) {
-			model = Utils.normalizeString(parameters.get(1).getValue().toString());
+			model = Utils.normalizeString(parameters.get(1).getValue(model).toString());
 		}
 		if (model != null) {
 			String[] split = Utils.normalizeString(model.toString()).split(regex);

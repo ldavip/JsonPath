@@ -27,5 +27,5 @@ public interface ILateBindingValue {
      * @return
      *      The value of evaluating the context at runtime.
      */
-    Object get();
+    Object get(Object rootDocument);
 }

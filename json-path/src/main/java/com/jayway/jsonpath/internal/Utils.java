@@ -25,10 +25,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Iterator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.jayway.jsonpath.internal.Symbols.*;
 
 public final class Utils {
 
@@ -49,10 +45,6 @@ public final class Utils {
     // accept a collection of objects, since all objects have toString()
     public static String join(String delimiter, Iterable<?> objs) {
         return join(delimiter, "", objs);
-    }
-
-    public static String concatChars(char... chars) {
-        return Stream.of(chars).map(String::valueOf).collect(Collectors.joining());
     }
 
     public static String concat(CharSequence... strings) {
@@ -453,13 +445,6 @@ public final class Utils {
      */
     public static TemporalAccessor parse(DateTimeFormatter formatter, CharSequence text) {
         return formatter.parseBest(text, LocalDateTime::from, LocalDate::from, LocalTime::from);
-    }
-
-    public static boolean isContextParam(Object param) {
-        if (param == null) {
-            return false;
-        }
-        return normalizeString(param.toString()).startsWith(concatChars(PARAM_CONTEXT, PERIOD));
     }
 
     private Utils() {

@@ -3,6 +3,7 @@ package com.jayway.jsonpath.internal.function.date;
 import com.jayway.jsonpath.JsonPathException;
 import com.jayway.jsonpath.internal.EvaluationContext;
 import com.jayway.jsonpath.internal.PathRef;
+import com.jayway.jsonpath.internal.Utils;
 import com.jayway.jsonpath.internal.function.AbstractAggregation;
 import com.jayway.jsonpath.internal.function.Parameter;
 
@@ -30,14 +31,16 @@ public abstract class AbstractTemporalAggregation<T extends TemporalAccessor> ex
             throw new JsonPathException("Temporal Aggregation function attempted to calculate value using empty parameter");
         }
 
-        String pattern = parameters.get(0).getValue().toString().replace("\"", "");
+        String pattern = Utils.normalizeString(parameters.get(0).getValue(model).toString());
 
         if (parameters.size() > 1) {
-            List<String> objects = Parameter.toList(String.class, ctx, parameters.subList(1, parameters.size()));
+            List<String> objects = Parameter.toList(String.class, ctx, parameters.subList(1, parameters.size()), model);
             for (String obj : objects) {
                 try {
-                    next(parse(obj, pattern));
-                    count++;
+                    if (obj != null && !obj.isEmpty()) {
+                        next(parse(obj, pattern));
+                        count++;
+                    }
                 } catch (DateTimeParseException e) {
                     throw new JsonPathException("Invalid temporal pattern " + pattern + " for input " + obj);
                 }
@@ -47,8 +50,10 @@ public abstract class AbstractTemporalAggregation<T extends TemporalAccessor> ex
             for (Object obj : objects) {
                 if (obj != null) {
                     try {
-                        next(parse(obj.toString(), pattern));
-                        count++;
+                        if (obj != null && !obj.toString().isEmpty()) {
+                            next(parse(obj.toString(), pattern));
+                            count++;
+                        }
                     } catch (DateTimeParseException e) {
                         throw new JsonPathException("Invalid temporal pattern " + pattern + " for input " + obj);
                     }

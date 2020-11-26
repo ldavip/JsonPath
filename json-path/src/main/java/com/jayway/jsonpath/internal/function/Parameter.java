@@ -30,8 +30,8 @@ public class Parameter {
         this.type = ParamType.PATH;
     }
 
-    public Object getValue() {
-        return lateBinding.get();
+    public Object getValue(Object functionModel) {
+        return lateBinding.get(functionModel);
     }
 
     public void setLateBinding(ILateBindingValue lateBinding) {
@@ -88,11 +88,11 @@ public class Parameter {
      * @return
      *      List of T either empty or containing contents.
      */
-    public static <T> List<T> toList(final Class<T> type, final EvaluationContext ctx, final List<Parameter> parameters) {
-        List<T> values = new ArrayList();
+    public static <T> List<T> toList(final Class<T> type, final EvaluationContext ctx, final List<Parameter> parameters, Object functionModel) {
+        List<T> values = new ArrayList<>();
         if (null != parameters) {
             for (Parameter param : parameters) {
-                consume(type, ctx, values, param.getValue());
+                consume(type, ctx, values, param.getValue(functionModel));
             }
         }
         return values;
